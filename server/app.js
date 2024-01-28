@@ -1,11 +1,15 @@
-import { createServer } from 'http';
+import express from 'express';
 import { Server } from 'socket.io';
 
-const httpServer = createServer();
-
+const app = express();
 const clientPORT = 5173;
+const PORT = process.env.PORT || 3000;
 
-const io = new Server(httpServer, {
+const server = app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+})
+
+const io = new Server(server, {
   cors: [`http://localhost:${clientPORT}`, `http://127.0.0.1:${clientPORT}`]
 })
 
@@ -21,8 +25,4 @@ io.on('connection', socket => {
     console.log('Disconnected');
     io.emit('msg', { id: 'System', text: `${socket.id.substring(0, 8)} has left.` })
   })
-})
-
-httpServer.listen(3000, () => {
-  console.log('Listening on port 3000');
 })
