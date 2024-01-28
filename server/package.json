@@ -1,0 +1,18 @@
+{
+  "name": "socket.io-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon ."
+  },
+  "author": "stevkim",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^4.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
