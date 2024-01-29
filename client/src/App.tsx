@@ -1,5 +1,6 @@
 import MessageForm from "./components/MessageForm"
 import MessageList from "./components/MessageList"
+import Activity from "./components/Activity"
 
 function App() {
 
@@ -8,6 +9,7 @@ function App() {
     <>
       <h1>Message App</h1>
       <MessageList />
+      <Activity />
       <MessageForm />
     </>
   )

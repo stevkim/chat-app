@@ -14,7 +14,12 @@ const io = new Server(server, {
 })
 
 io.on('connection', socket => {
-  io.emit('msg', { id: 'System', text: `${socket.id.substring(0, 8)} has joined the room.` })
+
+  // Message to the user that connected
+  socket.emit('msg', { id: 'System', text: 'Welcome to Miscord!'})
+
+  // Message to everyone else in the room
+  socket.broadcast.emit('msg', { id: 'System', text: `User ${socket.id.substring(0, 8)}} has joined the room.`})
 
   socket.on('msg', data => {
     console.log(data);
@@ -23,6 +28,11 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log('Disconnected');
-    io.emit('msg', { id: 'System', text: `${socket.id.substring(0, 8)} has left.` })
+    socket.broadcast.emit('msg', { id: 'System', text: `${socket.id.substring(0, 8)} has left.` })
+  })
+
+  socket.on('activity', (name) => {
+    console.log(name)
+    socket.broadcast.emit('activity', `${name} is typing...`);
   })
 })
