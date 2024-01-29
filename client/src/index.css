@@ -13,3 +13,14 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.selector {
+  display: flex;
+  gap: 1em;
+}

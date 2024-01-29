@@ -1,18 +1,23 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { socket } from "../utils/socket";
+import { useContext } from "react";
+import { RoomContext, RoomState } from "../contexts/RoomContext";
+import { NameContext, NameState } from "../contexts/NameContext";
 
 const MessageForm = () => {
   const [message, setMessage] = useState<string>('');
+  const { room } = useContext(RoomContext) as RoomState;
+  const { name } = useContext(NameContext) as NameState;
 
   const handleSend = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket.emit('msg', message);
+    socket.emit('msg', { name, room, text: message });
     setMessage('');
   }
 
   const handleActivity = (e:ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    socket.emit('activity', 'Some name');
+    socket.emit('activity', { name, room });
     setMessage(e.target.value);
   }
 

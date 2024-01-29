@@ -7,13 +7,13 @@ const Activity = () => {
   useEffect(() => {
     let clearActivity: ReturnType<typeof setTimeout>;
 
-    socket.on('activity', (name) => {
-      setActivity(name);
+    socket.on('activity', (message) => {
+      setActivity(message);
 
       clearTimeout(clearActivity);
       clearActivity = setTimeout(() => {
         setActivity(null);
-      }, 2000);
+      }, 1000);
     })
   }, [])
 

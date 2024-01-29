@@ -1,16 +1,16 @@
-import MessageForm from "./components/MessageForm"
-import MessageList from "./components/MessageList"
-import Activity from "./components/Activity"
+import { Outlet, Link } from "@tanstack/react-router"
+import ContextProvider from "./contexts/ContextProvider";
 
 function App() {
 
-
   return (
     <>
-      <h1>Message App</h1>
-      <MessageList />
-      <Activity />
-      <MessageForm />
+      <div className="navbar">
+        <Link to='/'>Home</Link>
+      </div>
+      <ContextProvider>
+        <Outlet />
+      </ContextProvider>
     </>
   )
 }

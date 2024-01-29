@@ -14,16 +14,17 @@ const io = new Server(server, {
 })
 
 io.on('connection', socket => {
-
-  // Message to the user that connected
-  socket.emit('msg', { id: 'System', text: 'Welcome to Miscord!'})
-
-  // Message to everyone else in the room
-  socket.broadcast.emit('msg', { id: 'System', text: `User ${socket.id.substring(0, 8)}} has joined the room.`})
+  socket.on('joinRoom', ({name, room}) => {
+    socket.join(room)
+    // Message to the user that connected
+    io.to(room).emit('msg', { id: 'System', text: `Welcome to Miscord! - Room ${room}`})
+    // Message to everyone else in the room
+    socket.broadcast.to(room).emit('msg', { id: 'System', text: `User ${name} has joined the room.`})
+  })
 
   socket.on('msg', data => {
-    console.log(data);
-    io.emit('msg', { id: socket.id.substring(0, 8), text: data });
+    const { name, text, room } = data;
+    io.to(room).emit('msg', { id: name, text: text });
   })
 
   socket.on('disconnect', () => {
@@ -31,8 +32,8 @@ io.on('connection', socket => {
     socket.broadcast.emit('msg', { id: 'System', text: `${socket.id.substring(0, 8)} has left.` })
   })
 
-  socket.on('activity', (name) => {
-    console.log(name)
-    socket.broadcast.emit('activity', `${name} is typing...`);
+  socket.on('activity', data => {
+    const { name, room } = data;
+    socket.broadcast.to(room).emit('activity', `${name} is typing...`);
   })
 })
