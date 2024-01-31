@@ -1,6 +1,7 @@
 import express from 'express';
 import 'dotenv/config'
 import { Server } from 'socket.io';
+import { addMessage, getMessagesFromRoom } from './controllers/messages.js';
 
 const app = express();
 const clientPORT = 5173;
@@ -21,11 +22,15 @@ io.on('connection', socket => {
     io.to(room).emit('msg', { id: 'System', text: `Welcome to Miscord! - Room ${room}`})
     // Message to everyone else in the room
     socket.broadcast.to(room).emit('msg', { id: 'System', text: `User ${name} has joined the room.`})
+
+    // All the messages for this room need to be sent to the user
   })
 
   socket.on('msg', data => {
     const { name, text, room } = data;
     io.to(room).emit('msg', { id: name, text: text });
+
+    // Message needs to be saved on the backend
   })
 
   socket.on('disconnect', () => {
