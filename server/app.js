@@ -1,4 +1,5 @@
 import express from 'express';
+import 'dotenv/config'
 import { Server } from 'socket.io';
 
 const app = express();
