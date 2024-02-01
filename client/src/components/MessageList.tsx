@@ -3,11 +3,11 @@ import { socket } from "../utils/socket";
 
 
 export type Message = {
-  id: number,
+  id: number | undefined,
   name: string,
-  text: string
+  text: string,
   room: string,
-  timestamp: number
+  timestamp: number | undefined
 }
 
 const MessageList = () => {

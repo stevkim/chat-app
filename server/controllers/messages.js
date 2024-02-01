@@ -1,26 +1,35 @@
-import db from './db/db.js';
+import db from '../db/db.js';
 
 export const addMessage = async (message) => {
-  const { error } = await db
-    .from('messages')
-    .insert(message);
+  try {
+    const { error } = await db
+      .from('messages')
+      .insert(message);
 
-  if (error) {
-    return error;
+    if (error) {
+      throw error;
+    }
+  } catch(error) {
+    return { message: 'Whoops, internal server error'};
   }
 }
 
 export const getMessagesFromRoom = async (room) => {
-  const { data, error } = await db
-    .from('messages');
-    .select()
-    .eq('room', room)
-    .order('date', { ascending: false })
-    .limit(50)
+  try {
+    const { data, error } = await db
+      .from('messages')
+      .select()
+      .eq('room', room)
+      .order('timestamp', { ascending: true })
+      .limit(50)
 
-  if (error) {
-    return error;
+    if (error) {
+      throw error;
+    }
+    return data;
+
+  } catch (error) {
+    console.log(error);
+    return null;
   }
-
-  return data;
 }

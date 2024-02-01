@@ -4,16 +4,17 @@ import { NameContext, NameState } from "../contexts/NameContext"
 import { Link } from "@tanstack/react-router"
 import { socket } from "../utils/socket"
 import ChooseName from "./ChooseName"
-
-const ROOMS = [
-  'room1',
-  'room2',
-  'room3'
-]
+import { useQuery } from "@tanstack/react-query"
+import { fetchRooms } from "../utils/fetch"
 
 const RoomSelect = () => {
   const { room, setRoom } = useContext(RoomContext) as RoomState;
   const { name } = useContext(NameContext) as NameState;
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ['roomsData'],
+    queryFn: fetchRooms,
+   })
 
   const handleSelect = (e:ChangeEvent<HTMLSelectElement>) => {
     setRoom(e.target.value);
@@ -23,13 +24,18 @@ const RoomSelect = () => {
     socket.emit('joinRoom', { name, room });
   }
 
+  if (isPending) return  <div> Loading... </div>
+
+  if (error) return <div>Error getting data!</div>
+
   return (
     <div className="selector">
       <ChooseName />
-      <select onChange={(e) => handleSelect(e)} defaultValue={ROOMS[0]}>
+      <select onChange={(e) => handleSelect(e)} defaultValue={'default'}>
+        <option value='default' disabled hidden>select a room</option>
         {
-          ROOMS.map(room => {
-            return <option key={room} value={room}>{room}</option>
+          data.map((room)=> {
+            return <option key={room.id} value={room.name}>{room.name}</option>
           })
         }
       </select>
