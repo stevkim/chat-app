@@ -3,8 +3,11 @@ import { socket } from "../utils/socket";
 
 
 export type Message = {
-  id: string,
+  id: number,
+  name: string,
   text: string
+  room: string,
+  timestamp: number
 }
 
 const MessageList = () => {
@@ -12,7 +15,11 @@ const MessageList = () => {
 
   useEffect(() => {
     socket.on('msg', data => {
-      setMsgList(prev => [...prev, data]);
+      if (Array.isArray(data)) {
+        setMsgList(prev => [...prev, ...data]);
+      } else {
+        setMsgList(prev => [...prev, data]);
+      }
     })
   }, [])
 
@@ -20,7 +27,7 @@ const MessageList = () => {
     <ul className="message-list">
       {
         msgList.map(message => {
-          return <li key={message.text}><span>{message.id}: </span> {message.text}</li>
+          return <li key={message.timestamp}><span>{message.name}: </span> {message.text}</li>
         })
       }
     </ul>
