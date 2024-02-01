@@ -29,7 +29,6 @@ io.on('connection', socket => {
     // Getting previous messages for the room
     const result = await getMessagesFromRoom(room);
 
-    console.log(result);
     // Message to the user that connected
     if (result) {
       socket.emit('msg', [...result, createSystemMessage(`Welcome to Miscord! - Room ${room}`)]);

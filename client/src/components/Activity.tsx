@@ -18,7 +18,7 @@ const Activity = () => {
   }, [])
 
   return (
-    <sub>{activity}</sub>
+    <span className="activity-tracker">{activity}</span>
   )
 }
 export default Activity;

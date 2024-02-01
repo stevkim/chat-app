@@ -1,6 +1,5 @@
 import MessageForm from "../components/MessageForm"
 import MessageList from "../components/MessageList"
-import Activity from "../components/Activity"
 import { useContext } from "react"
 import { RoomContext, RoomState } from "../contexts/RoomContext"
 import { Navigate } from "@tanstack/react-router"
@@ -15,9 +14,8 @@ const MessagePage = () => {
 
   return (
     <div>
-      <h1>Main Room</h1>
+      <h1>{room}</h1>
       <MessageList />
-      <Activity />
       <MessageForm />
     </div>
   )

@@ -4,14 +4,34 @@ body {
   align-items: center;
 }
 
-.message-list {
-  height: 600px;
-  width: 400px;
-  border: 1px solid rgba(0,0,0, 0.6);
+ul {
   list-style: none;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+}
+
+ul::-webkit-scrollbar {
+  display:none;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-list {
+  height: 1000px;
+  width: 800px;
+  padding: 1em;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
 
   display: flex;
   flex-direction: column;
+  gap: 1.2em;
 }
 
 .navbar {
@@ -23,4 +43,74 @@ body {
 .selector {
   display: flex;
   gap: 1em;
+}
+
+.system-message {
+  width: 100%;
+  text-align: center;
+  padding: .2em;
+  font-weight: 600;
+}
+
+.user-message, .sender-message {
+  width: 60%;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 1em;
+
+  position: relative;
+}
+
+.user-message {
+  margin-left: auto;
+}
+
+.message-name {
+  position: absolute;
+  left: .5em;
+  top: -1.3em;
+  font-size: .8em;
+  color: rgba(0,0,0, 0.6);
+
+}
+
+.message-date {
+  position: absolute;
+  right: 1em;
+  bottom: 0;
+  font-size: .2em;
+}
+
+.message-form {
+  width: 100%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+.message-form-title {
+  font-weight: 600;
+  width: 100%;
+}
+
+.message-input {
+  width: 100%;
+  height: 2rem;
+  margin-bottom: .5rem;
+}
+
+.message-form-submit {
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.activity-tracker {
+  height: 1rem;
+  font-style: italic;
+  font-weight: 300;
+  font-size: .8rem;
 }

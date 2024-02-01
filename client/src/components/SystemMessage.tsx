@@ -5,9 +5,9 @@ interface Props {
   message: TMessage
 }
 
-const SystemMessage = ({ message }) => {
+const SystemMessage = ({ message }:Props) => {
   return (
-    <li key={message.text + }>{message.text}</li>
+    <li key={message.timestamp} className="system-message">{message.text}</li>
   )
 }
 export default SystemMessage

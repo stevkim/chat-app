@@ -1,17 +1,12 @@
 import { useState, useEffect } from "react";
 import { socket } from "../utils/socket";
-
-
-export type Message = {
-  id: number | undefined,
-  name: string,
-  text: string,
-  room: string,
-  timestamp: number | undefined
-}
+import SystemMessage from "./SystemMessage";
+import UserMessage from "./UserMessage";
+import type { TMessage } from "../utils/types";
+import Activity from "./Activity";
 
 const MessageList = () => {
-  const [msgList, setMsgList] = useState<Message[]>([]);
+  const [msgList, setMsgList] = useState<TMessage[]>([]);
 
   useEffect(() => {
     socket.on('msg', data => {
@@ -27,9 +22,13 @@ const MessageList = () => {
     <ul className="message-list">
       {
         msgList.map(message => {
-          return <li key={message.timestamp}><span>{message.name}: </span> {message.text}</li>
+          if (message.name === 'System') {
+            return <SystemMessage message={message} />
+          }
+          return <UserMessage message={message} />
         })
       }
+      <Activity />
     </ul>
   )
 }
