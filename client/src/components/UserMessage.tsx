@@ -10,7 +10,7 @@ const UserMessage = ({ message }:Props) => {
   const { name } = useContext(NameContext) as NameState
 
   return (
-    <div key={message.timestamp} className={message.name === name ? 'user-message' : 'sender-message'}>
+    <div key={message.text + message.timestamp} className={message.name === name ? 'user-message' : 'sender-message'}>
       <li><span className="message-name">{message.name === name ? '' : message.name}</span>{message.text}</li>
       <sub className="message-date">{message.timestamp}</sub>
     </div>
