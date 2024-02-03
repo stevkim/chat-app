@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext } from "react"
+import { ChangeEvent, useContext, useEffect } from "react"
 import { RoomContext, RoomState } from "../contexts/RoomContext"
 import { NameContext, NameState } from "../contexts/NameContext"
 import { Link } from "@tanstack/react-router"
@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query"
 import { fetchRooms } from "../utils/fetch"
 
 const RoomSelect = () => {
-  const { room, setRoom } = useContext(RoomContext) as RoomState;
+  const { room, handleRoomChange, setRoomList } = useContext(RoomContext) as RoomState;
   const { name } = useContext(NameContext) as NameState;
 
   const { isPending, error, data } = useQuery({
@@ -16,8 +16,12 @@ const RoomSelect = () => {
     queryFn: fetchRooms,
    })
 
+  useEffect(() => {
+    setRoomList(data || []);
+  }, [data, setRoomList])
+
   const handleSelect = (e:ChangeEvent<HTMLSelectElement>) => {
-    setRoom(e.target.value);
+    handleRoomChange(e.target.value);
   }
 
   const handleJoinRoom = () => {

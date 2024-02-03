@@ -2,7 +2,9 @@ import express from 'express';
 import 'dotenv/config'
 import { Server } from 'socket.io';
 import { addMessage, getMessagesFromRoom } from './controllers/messages.js';
+import { getCurrentRoom, updateCurrentRoom, setCurrentRoom } from './controllers/rooms.js';
 import roomRouter from './routes/roomRouter.js';
+import messagesRouter from './routes/messagesRouter.js';
 import cors from 'cors';
 
 const app = express();
@@ -12,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use('/api/rooms', roomRouter);
+app.use('/api/messages', messagesRouter);
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
@@ -22,24 +25,28 @@ export const io = new Server(server, {
 })
 
 io.on('connection', socket => {
-  socket.on('joinRoom', async ({name, room }) => {
-    // some type of logic to figure out room persistence
-    socket.join(room)
+  socket.on('joinRoom', async ({ name, room }) => {
 
-    // Getting previous messages for the room
-    const result = await getMessagesFromRoom(room);
+    const prevRoom = await getCurrentRoom(name);
 
-    // Message to the user that connected
-    if (result) {
-      socket.emit('msg', [...result, createSystemMessage(`Welcome to Miscord! - Room ${room}`)]);
+    if (prevRoom) {
+      socket.leave(prevRoom);
+      await updateCurrentRoom({ name, room });
     } else {
-      socket.emit('msg', createSystemMessage(`Welcome to Miscord! - Room ${room}`));
+      await setCurrentRoom({ name, room });
     }
+    socket.join(room)
+  })
+
+  socket.on('joinedRoom', ({ name, room }) => {
+    // Message to the user that connected
+    socket.emit('msg', createSystemMessage(`Welcome to Miscord! - Room ${room}`));
     // Message to everyone else in the room
     socket.broadcast.to(room).emit('msg', createSystemMessage(`User ${name} has joined the room.`))
   })
 
   socket.on('msg', async (data) => {
+    console.log(data)
     // format and send message to everyone in the room
     const formatted = createMessage(data);
     io.to(formatted.room).emit('msg', formatted);

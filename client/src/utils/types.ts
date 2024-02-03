@@ -1,4 +1,8 @@
-
+export type TRooms = {
+  id: number,
+  name: string,
+  image: string
+}
 
 
 export type TMessage = {

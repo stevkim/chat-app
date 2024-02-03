@@ -7,7 +7,7 @@ interface Props {
 
 const SystemMessage = ({ message }:Props) => {
   return (
-    <li key={message.text + message.timestamp} className="system-message">{message.text}</li>
+    <li className="system-message">{message.text}</li>
   )
 }
 export default SystemMessage

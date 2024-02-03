@@ -1,23 +1,12 @@
-import { useState, useEffect, useRef } from "react";
-import { socket } from "../utils/socket";
+import { useEffect, useRef, useContext } from "react";
 import SystemMessage from "./SystemMessage";
 import UserMessage from "./UserMessage";
-import type { TMessage } from "../utils/types";
 import Activity from "./Activity";
+import { MessageListContext, MessageListState } from "../contexts/MessageListContext";
 
 const MessageList = () => {
-  const [msgList, setMsgList] = useState<TMessage[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    socket.on('msg', data => {
-      if (Array.isArray(data)) {
-        setMsgList(prev => [...prev, ...data]);
-      } else {
-        setMsgList(prev => [...prev, data]);
-      }
-    })
-  }, [])
+  const { msgList } = useContext(MessageListContext) as MessageListState;
 
   useEffect(() => {
     // scroll back to bottom when a new message is added
@@ -29,9 +18,9 @@ const MessageList = () => {
       {
         msgList.map(message => {
           if (message.name === 'System') {
-            return <SystemMessage message={message} />
+            return <SystemMessage key={Date.now()} message={message} />
           } else {
-            return <UserMessage message={message} />
+            return <UserMessage key={message.timestamp} message={message} />
           }
         })
       }
